@@ -2,7 +2,7 @@
 ## 1. 技术栈选择
 前端: Vue.js
 后端: Koa.js
-数据库: PostgreSQL 或 MySQL
+数据库: PostgreSQL 或 MySQL/mongo吧
 认证: JWT (JSON Web Token)
 容器化: Docker
 Kubernetes 管理: kubectl 命令行工具
