@@ -3,6 +3,7 @@ const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const mongoose = require('mongoose');
 const jwt = require('koa-jwt');
+const cors = require('@koa/cors');
 const config = require('./config');
 
 const app = new Koa();
@@ -14,6 +15,7 @@ mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: t
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Middleware
+app.use(cors());
 app.use(bodyParser());
 app.use(jwt({ secret: config.jwtSecret }).unless({ path: [/^\/api\/(register|login)/] }));
 

@@ -3,14 +3,14 @@
       <h2>Application Deployment</h2>
       <form @submit.prevent="handleDeployApplication">
         <input v-model="appName" placeholder="Application Name" required />
-        <input v-model="nodeId" placeholder="Node ID" required />
+        <input v-model="clusterId" placeholder="Cluster ID" required />
         <button type="submit" :disabled="loading">Deploy Application</button>
       </form>
       <div v-if="loading">Deploying application...</div>
       <div v-if="error" class="error">{{ error }}</div>
       <ul>
         <li v-for="app in applications" :key="app.id">
-          {{ app.name }} (Node: {{ app.nodeId }})
+          {{ app.name }} (Cluster: {{ app.clusterId }})
           <button @click="handleDeleteApplication(app.id)" :disabled="loading">Delete</button>
         </li>
       </ul>
@@ -24,7 +24,7 @@
     data() {
       return {
         appName: '',
-        nodeId: '',
+        clusterId: '',
         loading: false,
         error: null,
       };
@@ -43,9 +43,9 @@
         this.loading = true;
         this.error = null;
         try {
-          await this.deployApplication({ name: this.appName, nodeId: this.nodeId });
+          await this.deployApplication({ appName: this.appName, clusterId: this.clusterId });
           this.appName = '';
-          this.nodeId = '';
+          this.clusterId = '';
           await this.fetchApplications();
         } catch (err) {
           this.error = 'Failed to deploy application';
@@ -66,7 +66,7 @@
         }
       },
       validateInputs() {
-        return this.appName.trim() !== '' && this.nodeId.trim() !== '';
+        return this.appName.trim() !== '' && this.clusterId.trim() !== '';
       },
     },
     created() {

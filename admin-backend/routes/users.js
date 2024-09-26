@@ -11,6 +11,7 @@ router.post('/register', async (ctx) => {
   const user = new User({ username, email, password });
   await user.save();
   ctx.body = { user };
+  return ctx.body;
 });
 
 router.post('/login', async (ctx) => {

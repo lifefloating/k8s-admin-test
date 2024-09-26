@@ -23,7 +23,7 @@
     },
     methods: {
       ...mapActions(['register']),
-      async register() {
+      async handleRegister() {
         await this.register({
           username: this.username,
           email: this.email,

@@ -1,6 +1,8 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 
+axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+
 export default createStore({
   state: {
     user: null,
@@ -19,41 +21,77 @@ export default createStore({
     },
   },
   actions: {
-    async login({ commit }, credentials) {
-      const response = await axios.post('/api/login', credentials);
-      commit('setUser', response.data.user);
+    async login({ commit }, { email, password }) {
+        try {
+            const response = await axios.post('/api/login', { email, password });
+            commit('setUser', response.data.user);
+          } catch (error) {
+            throw error.response.data?.error || 'error';
+          }
     },
     async register({ commit }, userInfo) {
-      const response = await axios.post('/api/register', userInfo);
-      commit('setUser', response.data.user);
+     try {
+        const response = await axios.post('/api/register', userInfo);
+        commit('setUser', response.data.user);
+     } catch (error) {
+        throw error.response.data?.error || 'error';
+     }
     },
     async fetchClusters({ commit }) {
-      const response = await axios.get('/api/clusters');
-      commit('setClusters', response.data.clusters);
-    },
-    async createCluster({ dispatch }, clusterInfo) {
-      await axios.post('/api/clusters', clusterInfo);
-      dispatch('fetchClusters');
-    },
-    async deleteCluster({ dispatch }, clusterId) {
-      await axios.delete(`/api/clusters/${clusterId}`);
-      dispatch('fetchClusters');
-    },
-    async fetchApplications({ commit }) {
-      const response = await axios.get('/api/applications');
-      commit('setApplications', response.data.applications);
-    },
-    async deployApplication({ dispatch }, appInfo) {
-      await axios.post('/api/applications', appInfo);
-      dispatch('fetchApplications');
-    },
-    async deleteApplication({ dispatch }, appId) {
-      await axios.delete(`/api/applications/${appId}`);
-      dispatch('fetchApplications');
-    },
-    async executeKubectlCommand(_, commandInfo) {
-      const response = await axios.post('/api/kubectl', commandInfo);
-      return response;
-    },
+        try {
+          const response = await axios.get('/api/clusters');
+          commit('setClusters', response.data.clusters);
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
+      async createCluster({ dispatch }, clusterInfo) {
+        try {
+          await axios.post('/api/clusters', clusterInfo);
+          dispatch('fetchClusters');
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
+      async deleteCluster({ dispatch }, clusterId) {
+        try {
+          await axios.delete(`/api/clusters/${clusterId}`);
+          dispatch('fetchClusters');
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
+      async fetchApplications({ commit }) {
+        try {
+          const response = await axios.get('/api/applications');
+          commit('setApplications', response.data.applications);
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
+      async deployApplication({ dispatch }, appInfo) {
+        try {
+          await axios.post('/api/applications', appInfo);
+          dispatch('fetchApplications');
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
+      async deleteApplication({ dispatch }, appId) {
+        try {
+          await axios.delete(`/api/applications/${appId}`);
+          dispatch('fetchApplications');
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
+      async executeKubectlCommand(_, commandInfo) {
+        try {
+          const response = await axios.post('/api/kubectl', commandInfo);
+          return response;
+        } catch (error) {
+            throw error.response.data?.error || 'error';
+        }
+      },
   },
 });
