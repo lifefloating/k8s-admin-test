@@ -49,84 +49,84 @@
 
  ## k8s Deploy Deployment
 aws ec2 k8s
-单节点，单机版本
+Single node, stand-alone version
 ![1](./images_readme/k8s-deploy0.png)
 
 ## ER models
-    1. **用户 (User)**
-   - **属性**：
-     - 用户ID (user_id, 主键)
-     - 用户名 (username, 唯一)
-     - 密码 (password)
-     - 邮箱 (email)
-     - 创建时间 (created_at)
+1. **User**
+   - **Attribute**:
+     - User ID (user_id, primary key)
+     - User name (username, unique)
+     - Password
+     - Password (password)
+     - Creation time (created_at)
 
-2. **集群 (Cluster)**
-   - **属性**：
-     - 集群ID (cluster_id, 主键)
-     - 集群名称 (cluster_name)
-     - 用户ID (user_id, 外键，关联到用户)
-     - 创建时间 (created_at)
-     - 状态 (status)
+2.** Cluster**
+   - **Attributes**:
+     - Cluster ID (cluster_id, primary key)
+     - Cluster name (cluster_name)
+     - Cluster ID (cluster_id, primary key) Cluster name (cluster_name) User ID (user_id, foreign key, associated with the user)
+     - Cluster name (cluster_name) User ID (user_id, foreign key, associated with the user) Creation time (created_at)
+     - Status (status)
 
-3. **节点 (Node)**
-   - **属性**：
-     - 节点ID (node_id, 主键)
-     - 节点名称 (node_name)
-     - 集群ID (cluster_id, 外键，关联到集群)
-     - 状态 (status)
-     - 创建时间 (created_at)
+3. **Node**.
+   - **Attributes**:
+     - Node ID (node_id, primary key)
+     - Node name (node_name)
+     - Node name (node_name) Node ID (cluster_id, foreign key, associated with the cluster)
+     - Cluster ID (cluster_id, foreign key, associated with the cluster)
+     - Node name (node_name) Cluster ID (cluster_id, foreign key, associated with the cluster) Status (status)
 
-4. **应用 (Application)**
-   - **属性**：
-     - 应用ID (app_id, 主键)
-     - 应用名称 (app_name)
-     - 集群ID (cluster_id, 外键，关联到集群)
-     - 部署时间 (deployed_at)
-     - 状态 (status)
+4. **Application**.
+   - **Attributes**:
+     - Application ID (app_id, primary key)
+     - Application name (app_name)
+     - Application ID (app_id, primary key) Application name (app_name) Cluster ID (cluster_id, foreign key, associated with cluster)
+     - Application ID (app_id, primary key) Application name (app_name) Cluster ID (cluster_id, foreign key, associated with the cluster)
+     - Status (status)
 
-5. **命令记录 (CommandLog)**
-   - **属性**：
-     - 命令ID (command_id, 主键)
-     - 用户ID (user_id, 外键，关联到用户)
-     - 集群ID (cluster_id, 外键，关联到集群)
-     - 命令内容 (command)
-     - 执行时间 (executed_at)
-     - 输出 (output)
-     - 状态 (status)
+5. **CommandLog**
+   - **Attributes**:
+     - Command ID (command_id, primary key)
+     - User ID (user_id, foreign key, associated with the user)
+     - Command ID (command_id, primary key) User ID (user_id, foreign key, associated with the user) Cluster ID (cluster_id, foreign key, associated with the cluster)
+     - Command (command)
+     - Execution time (executed_at)
+     - Output (output)
+     - Status (status)
 
-## er models图
-er图
+## er models
+er diagram
 ![2](./images_readme/er1.png)
 
-## 基本实现逻辑
+## Basic implementation logic
 
-### 1. 手动搭建 Kubernetes 集群
+### 1. Build a Kubernetes Cluster Manually
 
-您可以在 AWS 上手动搭建 Kubernetes 集群，使用以下工具和步骤：
+You can manually build a Kubernetes cluster on AWS, using the following tools and steps:
 
-- **Kubernetes 部署工具**：使用 `kubeadm` 可以快速在 EC2 实例上搭建 Kubernetes 集群。
-- **云实例**：创建多个 EC2 实例，作为 Kubernetes 的主节点和工作节点。
+- **Kubernetes Deployment Tool**: use `kubeadm` to quickly build a Kubernetes cluster on an EC2 instance.
+- **Cloud instances**: create multiple EC2 instances to act as master and worker nodes for Kubernetes.
 
-### 2. 部署应用程序
+### 2. Deploying the application
 
-- **Docker 镜像**：
-  - 在本地或 CI/CD 环境中构建 Docker 镜像，并推送到 Docker Hub 或 AWS ECR。
+- **Docker image**:
+  - Build a Docker image locally or in a CI/CD environment and push it to Docker Hub or AWS ECR.
   
-- **Kubernetes YAML 文件**：
-  - 使用 Kubernetes 的 YAML 文件定义应用的部署、服务等资源。
+- **Kubernetes YAML files**:
+  - Use Kubernetes YAML files to define application deployments, services, and other resources.
 
-- **kubectl 部署**：
-  - 使用 `kubectl apply -f <your-deployment-file>.yaml` 命令在集群中部署应用。
+- **kubectl deployment**:
+  - Use the `kubectl apply -f <your-deployment-file>.yaml` command to deploy an application in a cluster.
 
-### 3. 执行 kubectl 命令
+### 3. Execute the kubectl command
 
-- **kubectl 配置**：
-  - 在用户登录后，生成并存储 Kubernetes 配置文件（通常是 `~/.kube/config`），以便 `kubectl` 可以访问 Kubernetes API。
+- **kubectl configuration**:
+  - Generates and stores a Kubernetes configuration file (typically `~/.kube/config`) after a user logs in so that `kubectl` can access the Kubernetes API.
 
-- **后端处理**：
-  - 在后端，使用类似 `os/exec` 的库（例如 Python 的 `subprocess` 或 Node.js 的 `child_process`）执行收到的 `kubectl` 命令。
-  - 捕获命令输出，并将结果返回给前端。
+- **Backend Processing**:
+  - On the backend, execute incoming `kubectl` commands using a library similar to `os/exec` (e.g. Python's `subprocess` or Node.js' `child_process`).
+  - Capture the command output and return the result to the frontend.
   
-## 备选方案
-  直接用https://github.com/kubernetes/dashboard 作为前端操作入口
+## Options
+  Directly use https://github.com/kubernetes/dashboard as the front-end operation entrance
