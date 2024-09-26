@@ -82,7 +82,6 @@ Single node, stand-alone version
      - Application ID (app_id, primary key)
      - Application name (app_name)
      - Application ID (app_id, primary key) Application name (app_name) Cluster ID (cluster_id, foreign key, associated with cluster)
-     - Application ID (app_id, primary key) Application name (app_name) Cluster ID (cluster_id, foreign key, associated with the cluster)
      - Status (status)
 
 5. **CommandLog**

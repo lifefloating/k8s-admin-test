@@ -1,0 +1,24 @@
+{
+  "name": "k8s-admin-backend",
+  "version": "1.0.0",
+  "description": "Koa.js backend for Kubernetes admin tool",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "koa": "^2.13.4",
+    "koa-router": "^10.0.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-jwt": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.12",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "author": "yqq",
+  "license": "MIT"
+}
